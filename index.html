@@ -1,0 +1,386 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Village Digital Help</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f8f4;
+    color: #24352a;
+}
+
+header {
+    background: #176b43;
+    color: white;
+    text-align: center;
+    padding: 22px 12px;
+}
+
+main {
+    max-width: 800px;
+    margin: auto;
+    padding: 18px;
+}
+
+.language {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+button, .link-btn {
+    padding: 12px 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.language button {
+    background: white;
+    color: #176b43;
+}
+
+.language button.active {
+    background: #f4c95d;
+}
+
+.card, .result, .help-box {
+    background: white;
+    padding: 20px;
+    margin: 16px 0;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px #00000010;
+}
+
+.services {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.service-btn, .main-btn {
+    background: #176b43;
+    color: white;
+    flex: 1 1 140px;
+}
+
+.main-btn {
+    width: 100%;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #aaa;
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.link-btn {
+    display: inline-block;
+    margin: 5px 5px 5px 0;
+    background: #176b43;
+    color: white;
+    text-decoration: none;
+}
+
+.help-button {
+    background: #fff1c7;
+    color: #493600;
+    margin-top: 8px;
+}
+
+.instructions {
+    display: none;
+    background: #f0f7f1;
+    border-left: 4px solid #176b43;
+    padding: 12px;
+    margin-top: 8px;
+    border-radius: 6px;
+}
+
+.instructions.show {
+    display: block;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1 id="siteTitle">Village Digital Help</h1>
+    <p id="tagline">Simple information and help for every village.</p>
+
+    <div class="language">
+        <button id="englishBtn" class="active"
+            onclick="setLanguage('en')">English</button>
+        <button id="hindiBtn"
+            onclick="setLanguage('hi')">हिंदी</button>
+    </div>
+</header>
+
+<main>
+    <section class="card">
+        <h2 id="welcomeTitle">How can we help you?</h2>
+        <p id="welcomeText">Choose a service below.</p>
+
+        <div class="services">
+            <button class="service-btn" id="pensionBtn"
+                onclick="showService('pension')">Pension Help</button>
+            <button class="service-btn" id="documentsBtn"
+                onclick="showService('documents')">Required Documents</button>
+            <button class="service-btn" id="bankingBtn"
+                onclick="showService('banking')">Banking Help</button>
+            <button class="service-btn" id="centresBtn"
+                onclick="showService('centres')">Find Help Centres</button>
+        </div>
+    </section>
+
+    <section class="result">
+        <h2 id="resultTitle">Choose a service</h2>
+        <p id="resultText">Information will appear here.</p>
+    </section>
+
+    <section class="help-box">
+        <h2 id="findTitle">Find nearby help</h2>
+        <p id="findText">Enter your village name or PIN code.</p>
+
+        <input id="locationInput"
+            placeholder="Village name or PIN code">
+
+        <button class="main-btn" id="searchBtn"
+            onclick="findHelpCentres()">Search Help Centres</button>
+
+        <div id="centreActions"></div>
+    </section>
+
+    <section class="help-box">
+        <h2 id="linksTitle">Useful Links</h2>
+
+        <h3 id="cscTitle">Common Service Centre (CSC)</h3>
+        <a class="link-btn" id="cscLink"
+           href="https://www.google.com/search?q=official+CSC+helpline+India"
+           target="_blank" rel="noopener noreferrer">Open CSC Information</a>
+
+        <button class="help-button" onclick="toggleHelp('cscHelp')"
+            id="cscHelpBtn">How to Open?</button>
+
+        <div class="instructions" id="cscHelp"></div>
+
+        <hr>
+
+        <h3 id="pensionTitle">Pension Help</h3>
+        <a class="link-btn" id="pensionLink"
+           href="https://www.google.com/search?q=official+NSAP+pension+grievance+helpline"
+           target="_blank" rel="noopener noreferrer">Open Pension Information</a>
+
+        <button class="help-button" onclick="toggleHelp('pensionHelp')"
+            id="pensionHelpBtn">How to Open?</button>
+
+        <div class="instructions" id="pensionHelp"></div>
+    </section>
+
+    <section class="help-box">
+        <h2 id="generalHelpTitle">How to open a link?</h2>
+        <p id="generalHelpText">
+            Tap the green link button. A new page will open.
+            Read the information on that page.
+        </p>
+    </section>
+</main>
+
+<footer id="footerText">
+    Check important information with official sources.
+</footer>
+
+<script>
+let currentLanguage = "en";
+
+const words = {
+    en: {
+        siteTitle: "Village Digital Help",
+        tagline: "Simple information and help for every village.",
+        welcomeTitle: "How can we help you?",
+        welcomeText: "Choose a service below.",
+        pensionBtn: "Pension Help",
+        documentsBtn: "Required Documents",
+        bankingBtn: "Banking Help",
+        centresBtn: "Find Help Centres",
+        resultTitle: "Choose a service",
+        resultText: "Information will appear here.",
+        findTitle: "Find nearby help",
+        findText: "Enter your village name or PIN code.",
+        searchBtn: "Search Help Centres",
+        linksTitle: "Useful Links",
+        cscTitle: "Common Service Centre (CSC)",
+        cscLink: "Open CSC Information",
+        pensionTitle: "Pension Help",
+        pensionLink: "Open Pension Information",
+        cscHelpBtn: "How to Open?",
+        pensionHelpBtn: "How to Open?",
+        generalHelpTitle: "How to open a link?",
+        generalHelpText: "Click the green link button. A new page will open. Read the information on that page.",
+        footerText: "Check important information with official sources.",
+        input: "Village name or PIN code",
+        empty: "Please enter your village name or PIN code.",
+        instructions: [
+            "Step 1: Click the green link button.",
+            "Step 2: A new page will open.",
+            "Step 3: Read the information on the page.",
+            "Step 4: If you need help, ask someone you trust."
+        ],
+        services: {
+            pension: ["Pension Help", "You may need your Aadhaar card, bank passbook and application details. Requirements depend on the scheme. Confirm with your local government office."],
+            documents: ["Required Documents", "Common documents may include Aadhaar card, bank passbook, photo and proof of age or address. Confirm the exact list before travelling."],
+            banking: ["Banking Help", "Contact your bank or an authorised banking centre. Never share your OTP or PIN."],
+            centres: ["Find Help Centres", "Enter your village name or PIN code below to search for nearby centres."]
+        },
+        details: "View Details",
+        directions: "Get Directions"
+    },
+    hi: {
+        siteTitle: "गाँव डिजिटल सहायता",
+        tagline: "हर गाँव के लिए आसान जानकारी और सहायता।",
+        welcomeTitle: "हम आपकी क्या मदद कर सकते हैं?",
+        welcomeText: "नीचे कोई सेवा चुनें।",
+        pensionBtn: "पेंशन सहायता",
+        documentsBtn: "ज़रूरी दस्तावेज़",
+        bankingBtn: "बैंकिंग सहायता",
+        centresBtn: "सहायता केंद्र खोजें",
+        resultTitle: "कोई सेवा चुनें",
+        resultText: "जानकारी यहाँ दिखाई देगी।",
+        findTitle: "पास में सहायता खोजें",
+        findText: "अपने गाँव का नाम या PIN कोड लिखें।",
+        searchBtn: "सहायता केंद्र खोजें",
+        linksTitle: "ज़रूरी लिंक",
+        cscTitle: "कॉमन सर्विस सेंटर (CSC)",
+        cscLink: "CSC की जानकारी खोलें",
+        pensionTitle: "पेंशन सहायता",
+        pensionLink: "पेंशन की जानकारी खोलें",
+        cscHelpBtn: "कैसे खोलें?",
+        pensionHelpBtn: "कैसे खोलें?",
+        generalHelpTitle: "लिंक कैसे खोलें?",
+        generalHelpText: "हरे रंग के लिंक बटन पर क्लिक करें। एक नया पेज खुलेगा। उस पेज पर दी गई जानकारी पढ़ें।",
+        footerText: "ज़रूरी जानकारी की पुष्टि आधिकारिक स्रोत से करें।",
+        input: "गाँव का नाम या PIN कोड",
+        empty: "कृपया गाँव का नाम या PIN कोड लिखें।",
+        instructions: [
+            "चरण 1: हरे रंग के लिंक बटन पर क्लिक करें।",
+            "चरण 2: एक नया पेज खुलेगा।",
+            "चरण 3: उस पेज पर दी गई जानकारी पढ़ें।",
+            "चरण 4: मदद चाहिए तो किसी भरोसेमंद व्यक्ति से पूछें।"
+        ],
+        services: {
+            pension: ["पेंशन सहायता", "आपको आधार कार्ड, बैंक पासबुक और आवेदन की जानकारी की ज़रूरत हो सकती है। सही जानकारी स्थानीय सरकारी कार्यालय से लें।"],
+            documents: ["ज़रूरी दस्तावेज़", "आधार कार्ड, बैंक पासबुक, फोटो और उम्र या पते का प्रमाण माँगा जा सकता है। जाने से पहले सही सूची की पुष्टि करें।"],
+            banking: ["बैंकिंग सहायता", "अपने बैंक या अधिकृत बैंकिंग केंद्र से संपर्क करें। अपना OTP या PIN किसी को न बताएँ।"],
+            centres: ["सहायता केंद्र खोजें", "पास के केंद्र खोजने के लिए नीचे अपने गाँव का नाम या PIN कोड लिखें।"]
+        },
+        details: "जानकारी देखें",
+        directions: "रास्ता देखें"
+    }
+};
+
+function setLanguage(language) {
+    currentLanguage = language;
+    document.documentElement.lang = language;
+
+    const t = words[language];
+
+    Object.keys(t).forEach(key => {
+        const el = document.getElementById(key);
+        if (el && typeof t[key] === "string") {
+            el.textContent = t[key];
+        }
+    });
+
+    document.getElementById("locationInput").placeholder = t.input;
+    document.getElementById("englishBtn").classList.toggle("active", language === "en");
+    document.getElementById("hindiBtn").classList.toggle("active", language === "hi");
+
+    const selected = document.getElementById("resultTitle").dataset.service;
+    if (selected) showService(selected);
+
+    ["cscHelp", "pensionHelp"].forEach(id => {
+        const box = document.getElementById(id);
+        if (box.classList.contains("show")) renderInstructions(id);
+    });
+
+    if (document.getElementById("locationInput").value.trim()) {
+        showCentreLinks();
+    }
+}
+
+function showService(service) {
+    const item = words[currentLanguage].services[service];
+    document.getElementById("resultTitle").textContent = item[0];
+    document.getElementById("resultText").textContent = item[1];
+    document.getElementById("resultTitle").dataset.service = service;
+}
+
+function toggleHelp(id) {
+    const box = document.getElementById(id);
+    box.classList.toggle("show");
+    if (box.classList.contains("show")) renderInstructions(id);
+}
+
+function renderInstructions(id) {
+    const list = words[currentLanguage].instructions;
+    document.getElementById(id).innerHTML =
+        "<ol>" + list.map(line => "<li>" + line.substring(line.indexOf(":") + 1) + "</li>").join("") + "</ol>";
+}
+
+function findHelpCentres() {
+    const location = document.getElementById("locationInput").value.trim();
+
+    if (!location) {
+        alert(words[currentLanguage].empty);
+        return;
+    }
+
+    const query = encodeURIComponent(
+        "Common Service Centre CSC authorised banking help near " + location
+    );
+    const directions = encodeURIComponent(
+        location + " to Common Service Centre"
+    );
+
+    document.getElementById("centreActions").innerHTML = `
+        <a class="link-btn" target="_blank" rel="noopener noreferrer"
+           href="https://www.google.com/maps/search/?api=1&query=${query}">
+           ${words[currentLanguage].details}
+        </a>
+        <button class="help-button" onclick="toggleHelp('mapHelp')">
+           ${words[currentLanguage].cscHelpBtn}
+        </button>
+        <div class="instructions" id="mapHelp"></div>
+        <p>
+          <a class="link-btn" target="_blank" rel="noopener noreferrer"
+             href="https://www.google.com/maps/dir/?api=1&destination=${directions}">
+             ${words[currentLanguage].directions}
+          </a>
+          <button class="help-button" onclick="toggleHelp('directionsHelp')">
+             ${words[currentLanguage].cscHelpBtn}
+          </button>
+        </p>
+        <div class="instructions" id="directionsHelp"></div>
+    `;
+}
+</script>
+
+</body>
+</html>
